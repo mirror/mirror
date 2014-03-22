@@ -32,6 +32,8 @@ git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
 git_mirror jpcsp svn http://jpcsp.googlecode.com/svn/trunk
 git_mirror launch4j cvs :pserver:anonymous@launch4j.cvs.sourceforge.net:/cvsroot/launch4j launch4j
 git_mirror levelzap git https://git01.codeplex.com/levelzap
+git_mirror libdvdread git git://git.videolan.org/libdvdread.git
+git_mirror libdvdnav git git://git.videolan.org/libdvdnav.git
 git_mirror libogc git git://devkitpro.git.sourceforge.net/gitroot/devkitpro/libogc
 git_mirror libreoffice git git://anongit.freedesktop.org/libreoffice/core
 git_mirror libtorrent svn https://svn.code.sf.net/p/libtorrent/code/trunk
