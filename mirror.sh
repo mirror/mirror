@@ -12,7 +12,6 @@ git_mirror busybox git git://busybox.net/busybox.git
 git_mirror calibre bzr lp:calibre
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror comical svn svn://svn.code.sf.net/p/comical/code/trunk
-git_mirror conemu svn http://conemu-maximus5.googlecode.com/svn/trunk
 git_mirror console-devel hg http://hg.code.sf.net/p/console-devel/code
 git_mirror cygwin cvs :pserver:anoncvs@sourceware.org:/cvs/src src
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
