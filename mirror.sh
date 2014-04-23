@@ -13,6 +13,7 @@ git_mirror calibre bzr lp:calibre
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror comical svn svn://svn.code.sf.net/p/comical/code/trunk
 git_mirror console-devel hg http://hg.code.sf.net/p/console-devel/code
+git_mirror cvsps git git://gitorious.org/cvsps/cvsps.git
 git_mirror cygwin cvs :pserver:anoncvs@sourceware.org:/cvs/src src
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
 git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT '--ignore-paths=^src/linux'
