@@ -45,7 +45,7 @@ git_mirror listfix svn https://svn.code.sf.net/p/listfix/code/dev
 git_mirror make git git://git.savannah.gnu.org/make
 git_mirror mame svn svn://dspnet.fr/mame/trunk
 git_mirror mingw-org-wsl git git://git.code.sf.net/p/mingw/mingw-org-wsl
-git_mirror mingw-w64 svn https://svn.code.sf.net/p/mingw-w64/code '--ignore-paths=^(branches|stable|tags|web)'
+git_mirror mingw-w64 git git://git.code.sf.net/p/mingw-w64/mingw-w64
 git_mirror mintty svn http://mintty.googlecode.com/svn/trunk
 git_mirror model3emu svn https://svn.code.sf.net/p/model3emu/code/trunk
 git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
