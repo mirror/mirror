@@ -17,7 +17,7 @@ git_mirror cvs-fast-export git git://gitorious.org/cvs-fast-export/cvs-fast-expo
 git_mirror cvsps git git://gitorious.org/cvsps/cvsps.git
 git_mirror cygwin cvs :pserver:anoncvs@sourceware.org:/cvs/src src
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
-git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT '--ignore-paths=^src/linux'
+git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
 git_mirror deluge git git://deluge-torrent.org/deluge
 git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode cvs :pserver:anonymous@cvs.savannah.gnu.org:/sources/dmidecode dmidecode
