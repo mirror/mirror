@@ -60,7 +60,7 @@ git_mirror pagedown hg https://code.google.com/p/pagedown
 git_mirror patch git git://git.savannah.gnu.org/patch.git
 git_mirror pcsx2 svn http://pcsx2.googlecode.com/svn/trunk
 git_mirror pcsxr svn https://pcsxr.svn.codeplex.com/svn/pcsxr
-git_mirror pinmame svn svn://svn.code.sf.net/p/pinmame/code/trunk/
+git_mirror pinmame svn svn://svn.code.sf.net/p/pinmame/code/trunk
 git_mirror plainamp svn svn://svn.code.sf.net/p/plainamp/code/trunk
 git_mirror plibc svn https://svn.code.sf.net/p/plibc/code/trunk/plibc
 git_mirror processhacker svn svn://svn.code.sf.net/p/processhacker/code
