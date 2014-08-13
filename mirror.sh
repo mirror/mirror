@@ -16,6 +16,7 @@ git_mirror console-devel hg http://hg.code.sf.net/p/console-devel/code
 git_mirror cvs-fast-export git git://gitorious.org/cvs-fast-export/cvs-fast-export.git
 git_mirror cvsps git git://gitorious.org/cvsps/cvsps.git
 git_mirror cygwin cvs :pserver:anoncvs@sourceware.org:/cvs/src src
+git_mirror daphne-emu svn https://www.daphne-emu.com:9443/daphnesvn/branches/v_1_0
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
 git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
 git_mirror deluge git git://deluge-torrent.org/deluge
@@ -59,6 +60,7 @@ git_mirror pagedown hg https://code.google.com/p/pagedown
 git_mirror patch git git://git.savannah.gnu.org/patch.git
 git_mirror pcsx2 svn http://pcsx2.googlecode.com/svn/trunk
 git_mirror pcsxr svn https://pcsxr.svn.codeplex.com/svn/pcsxr
+git_mirror pinmame svn svn://svn.code.sf.net/p/pinmame/code/trunk/
 git_mirror plainamp svn svn://svn.code.sf.net/p/plainamp/code/trunk
 git_mirror plibc svn https://svn.code.sf.net/p/plibc/code/trunk/plibc
 git_mirror processhacker svn svn://svn.code.sf.net/p/processhacker/code
