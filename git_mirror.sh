@@ -75,7 +75,7 @@ function git_mirror() {
 	hg) c="hg clone $from ."
 		p='hg pull';;
 	svn) c="svn clone $arg $from ."
-		p="svn rebase";;
+		p="svn fetch";;
 	*) echo "$type is unsupported"; return 1;;
 	esac
 
