@@ -33,7 +33,7 @@ git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
 git_mirror irssi git git://git.irssi.org/irssi
 git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
 git_mirror jpcsp svn http://jpcsp.googlecode.com/svn/trunk
-git_mirror launch4j cvs :pserver:anonymous@launch4j.cvs.sourceforge.net:/cvsroot/launch4j launch4j
+git_mirror launch4j git git://git.code.sf.net/p/launch4j/git
 git_mirror levelzap git https://git01.codeplex.com/levelzap
 git_mirror libdvdread git git://git.videolan.org/libdvdread.git
 git_mirror libdvdnav git git://git.videolan.org/libdvdnav.git
