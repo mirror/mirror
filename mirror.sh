@@ -23,7 +23,6 @@ git_mirror deluge git git://deluge-torrent.org/deluge
 git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode cvs :pserver:anonymous@cvs.savannah.gnu.org:/sources/dmidecode dmidecode
 git_mirror dolphin-emu git https://code.google.com/p/dolphin-emu
-git_mirror dxwnd git git://git.code.sf.net/p/dxwnd/code
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
 git_mirror ffmpeg-debian git https://alioth.debian.org/anonscm/git/collab-maint/ffmpeg.git
 git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
