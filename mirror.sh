@@ -29,6 +29,8 @@ git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
 git_mirror flashdevelop svn http://flashdevelop.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
 git_mirror grrlib svn http://grrlib.googlecode.com/svn/trunk
+git_mirror haikuporter git https://bitbucket.org/haikuports/haikuporter.git
+git_mirror haikuports git https://bitbucket.org/haikuports/haikuports.git
 git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
 git_mirror irssi git git://git.irssi.org/irssi
 git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
