@@ -51,6 +51,8 @@ git_mirror mingw-org-wsl git git://git.code.sf.net/p/mingw/mingw-org-wsl
 git_mirror mingw-w64 git git://git.code.sf.net/p/mingw-w64/mingw-w64
 git_mirror mintty svn http://mintty.googlecode.com/svn/trunk
 git_mirror model3emu svn https://svn.code.sf.net/p/model3emu/code/trunk
+git_mirror moin-1.9 git https://bitbucket.org/thomaswaldmann/moin-1.9
+git_mirror moin-2.0 git https://bitbucket.org/thomaswaldmann/moin-2.0
 git_mirror ncurses git git://ncurses.scripts.mit.edu/ncurses.git
 git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
 git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
