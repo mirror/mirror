@@ -81,6 +81,7 @@ git_mirror sed git git://git.savannah.gnu.org/sed.git
 git_mirror smartmontools svn https://svn.code.sf.net/p/smartmontools/code/trunk/smartmontools
 git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
 git_mirror superputty svn http://superputty.googlecode.com/svn/trunk
+git_mirror tclap git git://git.code.sf.net/p/tclap/code
 git_mirror vba cvs :pserver:anonymous@vba.cvs.sourceforge.net:/cvsroot/vba VisualBoyAdvance
 git_mirror vba-rerecording svn http://vba-rerecording.googlecode.com/svn/trunk
 git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
