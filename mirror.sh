@@ -78,6 +78,8 @@ git_mirror r svn https://svn.r-project.org/R/trunk
 git_mirror rarfilesource git http://www.v12pwr.com/RARFileSource.git
 git_mirror reactos svn svn://svn.reactos.org/reactos/trunk
 git_mirror rtmpdump git git://git.ffmpeg.org/rtmpdump.git
+git_mirror scintilla hg http://hg.code.sf.net/p/scintilla/code
+git_mirror scite hg http://hg.code.sf.net/p/scintilla/scite
 git_mirror sed git git://git.savannah.gnu.org/sed.git
 git_mirror smartmontools svn https://svn.code.sf.net/p/smartmontools/code/trunk/smartmontools
 git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
