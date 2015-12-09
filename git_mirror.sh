@@ -2,8 +2,6 @@
 # Repository mirrorer
 # © John Peterson. License GNU GPL 3.
 
-org='mirror'
-
 function create_repo() {
 	name=$1
 	description=$2
