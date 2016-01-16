@@ -65,7 +65,6 @@ git_mirror pinmame svn svn://svn.code.sf.net/p/pinmame/code/trunk
 git_mirror plainamp svn svn://svn.code.sf.net/p/plainamp/code/trunk
 git_mirror plibc svn https://svn.code.sf.net/p/plibc/code/trunk/plibc
 git_mirror processhacker svn svn://svn.code.sf.net/p/processhacker/code
-git_mirror qconf svn http://delta.affinix.com/svn/trunk/qconf
 git_mirror r svn https://svn.r-project.org/R/trunk
 git_mirror rarfilesource git http://www.v12pwr.com/RARFileSource.git
 git_mirror reactos svn svn://svn.reactos.org/reactos/trunk
