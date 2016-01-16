@@ -31,7 +31,6 @@ git_mirror flashdevelop svn http://flashdevelop.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
 git_mirror grrlib svn http://grrlib.googlecode.com/svn/trunk
 git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
-git_mirror irssi git git://git.irssi.org/irssi
 git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
 git_mirror jpcsp svn http://jpcsp.googlecode.com/svn/trunk
 git_mirror launch4j git git://git.code.sf.net/p/launch4j/git
