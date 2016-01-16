@@ -68,7 +68,6 @@ git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
 git_mirror superputty svn http://superputty.googlecode.com/svn/trunk
 git_mirror tclap git git://git.code.sf.net/p/tclap/code
 git_mirror tinycc git git://repo.or.cz/tinycc.git
-git_mirror vba cvs :pserver:anonymous@vba.cvs.sourceforge.net:/cvsroot/vba VisualBoyAdvance
 git_mirror vba-rerecording svn http://vba-rerecording.googlecode.com/svn/trunk
 git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
 git_mirror vbox svn http://www.virtualbox.org/svn/vbox/trunk
