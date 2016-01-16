@@ -20,7 +20,6 @@ git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
 git_mirror deluge git git://deluge-torrent.org/deluge
 git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode cvs :pserver:anonymous@cvs.savannah.gnu.org:/sources/dmidecode dmidecode
-git_mirror dolphin-emu git https://code.google.com/p/dolphin-emu
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
 git_mirror equalizerapo svn svn://svn.code.sf.net/p/equalizerapo/code/trunk
 git_mirror ffmpeg-debian git https://alioth.debian.org/anonscm/git/collab-maint/ffmpeg.git
