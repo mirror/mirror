@@ -57,7 +57,6 @@ git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
 git_mirror obsproject git git://git.code.sf.net/p/obsproject/code
 git_mirror odin svn https://svn.code.sf.net/p/odin-win/code/trunk
 git_mirror openal-soft git git://repo.or.cz/openal-soft.git
-git_mirror openoffice git git://git.apache.org/openoffice.git
 git_mirror pagedown hg https://code.google.com/p/pagedown
 git_mirror patch git git://git.savannah.gnu.org/patch.git
 git_mirror pcsx2 svn http://pcsx2.googlecode.com/svn/trunk
