@@ -68,7 +68,6 @@ git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
 git_mirror superputty svn http://superputty.googlecode.com/svn/trunk
 git_mirror tclap git git://git.code.sf.net/p/tclap/code
 git_mirror tinycc git git://repo.or.cz/tinycc.git
-git_mirror vba-rerecording svn http://vba-rerecording.googlecode.com/svn/trunk
 git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
 git_mirror vbox svn http://www.virtualbox.org/svn/vbox/trunk
 git_mirror virtualjaguar git http://shamusworld.gotdns.org/git/virtualjaguar
@@ -80,3 +79,6 @@ git_mirror x264 git http://git.videolan.org/git/x264.git
 git_mirror xmlrpc-c svn http://svn.code.sf.net/p/xmlrpc-c/code '--ignore-paths=^(release_number|super_stable|userguide)'
 git_mirror xmlstar git git://git.code.sf.net/p/xmlstar/code
 git_mirror xserver git git://anongit.freedesktop.org/xorg/xserver
+
+# The following projects are dead:
+# git_mirror vba-rerecording svn http://vba-rerecording.googlecode.com/svn/trunk
