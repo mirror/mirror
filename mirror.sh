@@ -13,7 +13,6 @@ git_mirror comical svn svn://svn.code.sf.net/p/comical/code/trunk
 git_mirror console-devel hg http://hg.code.sf.net/p/console-devel/code
 git_mirror cvs-fast-export git git://gitorious.org/cvs-fast-export/cvs-fast-export.git
 git_mirror cvsps git git://gitorious.org/cvsps/cvsps.git
-git_mirror cygwin cvs :pserver:anoncvs@sourceware.org:/cvs/src src
 git_mirror daphne-emu svn https://www.daphne-emu.com:9443/daphnesvn/branches/v_1_0
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
 git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
@@ -47,6 +46,7 @@ git_mirror moin-1.9 hg https://bitbucket.org/thomaswaldmann/moin-1.9
 git_mirror moin-2.0 hg https://bitbucket.org/thomaswaldmann/moin-2.0
 git_mirror muparserx svn http://muparserx.googlecode.com/svn/trunk
 git_mirror ncurses git git://ncurses.scripts.mit.edu/ncurses.git
+git_mirror newlib-cygwin git git://sourceware.org/git/newlib-cygwin.git
 git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
 git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
 git_mirror odin svn https://svn.code.sf.net/p/odin-win/code/trunk
