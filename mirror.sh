@@ -51,7 +51,6 @@ git_mirror ncurses git git://ncurses.scripts.mit.edu/ncurses.git
 git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
 git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
 git_mirror odin svn https://svn.code.sf.net/p/odin-win/code/trunk
-git_mirror openal-soft git git://repo.or.cz/openal-soft.git
 git_mirror patch git git://git.savannah.gnu.org/patch.git
 git_mirror pcsx2 svn http://pcsx2.googlecode.com/svn/trunk
 git_mirror pcsxr svn https://pcsxr.svn.codeplex.com/svn/pcsxr
