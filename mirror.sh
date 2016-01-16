@@ -9,7 +9,6 @@
 git_mirror boost svn http://svn.boost.org/svn/boost/trunk
 git_mirror boost/release svn http://svn.boost.org/svn/boost/branches/release
 git_mirror busybox git git://busybox.net/busybox.git
-git_mirror calibre git git://github.com/kovidgoyal/calibre.git
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror chromium git https://chromium.googlesource.com/chromium/src.git
 git_mirror comical svn svn://svn.code.sf.net/p/comical/code/trunk
