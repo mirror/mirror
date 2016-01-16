@@ -94,7 +94,6 @@ git_mirror wget git git://git.sv.gnu.org/wget.git
 git_mirror wiimms-iso-tools svn http://opensvn.wiimm.de/wii/branches/public/wiimms-iso-tools
 git_mirror winscp cvs :pserver:anonymous@winscp.cvs.sourceforge.net:/cvsroot/winscp winscp3
 git_mirror x264 git http://git.videolan.org/git/x264.git
-git_mirror x265 hg https://bitbucket.org/multicoreware/x265
 git_mirror xmlrpc-c svn http://svn.code.sf.net/p/xmlrpc-c/code '--ignore-paths=^(release_number|super_stable|userguide)'
 git_mirror xmlstar git git://git.code.sf.net/p/xmlstar/code
 git_mirror xserver git git://anongit.freedesktop.org/xorg/xserver
