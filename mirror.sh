@@ -50,7 +50,6 @@ git_mirror muparserx svn http://muparserx.googlecode.com/svn/trunk
 git_mirror ncurses git git://ncurses.scripts.mit.edu/ncurses.git
 git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
 git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
-git_mirror obsproject git git://git.code.sf.net/p/obsproject/code
 git_mirror odin svn https://svn.code.sf.net/p/odin-win/code/trunk
 git_mirror openal-soft git git://repo.or.cz/openal-soft.git
 git_mirror pagedown hg https://code.google.com/p/pagedown
