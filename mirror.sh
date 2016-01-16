@@ -6,8 +6,6 @@
 . git_mirror.sh
 
 # repos
-git_mirror boost svn http://svn.boost.org/svn/boost/trunk
-git_mirror boost/release svn http://svn.boost.org/svn/boost/branches/release
 git_mirror busybox git git://busybox.net/busybox.git
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror chromium git https://chromium.googlesource.com/chromium/src.git
