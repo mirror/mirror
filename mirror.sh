@@ -45,7 +45,6 @@ git_mirror moin-1.9 hg https://bitbucket.org/thomaswaldmann/moin-1.9
 git_mirror moin-2.0 hg https://bitbucket.org/thomaswaldmann/moin-2.0
 git_mirror ncurses git git://ncurses.scripts.mit.edu/ncurses.git
 git_mirror newlib-cygwin git git://sourceware.org/git/newlib-cygwin.git
-git_mirror notepadplus svn svn://svn.tuxfamily.org/svnroot/notepadplus/repository/trunk
 git_mirror nulldc svn http://nulldc.googlecode.com/svn/trunk
 git_mirror odin svn https://svn.code.sf.net/p/odin-win/code/trunk
 git_mirror patch git git://git.savannah.gnu.org/patch.git
