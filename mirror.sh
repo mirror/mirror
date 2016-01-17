@@ -33,7 +33,6 @@ git_mirror levelzap git https://git01.codeplex.com/levelzap
 git_mirror libdvdread git git://git.videolan.org/libdvdread.git
 git_mirror libdvdnav git git://git.videolan.org/libdvdnav.git
 git_mirror libosinfo git http://git.fedorahosted.org/git/libosinfo.git
-git_mirror libtorrent svn https://svn.code.sf.net/p/libtorrent/code/trunk
 git_mirror libX11 git git://anongit.freedesktop.org/xorg/lib/libX11
 git_mirror libXi git git://anongit.freedesktop.org/xorg/lib/libXi
 git_mirror listfix svn https://svn.code.sf.net/p/listfix/code/dev
