@@ -20,7 +20,6 @@ git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode git http://git.savannah.gnu.org/r/dmidecode.git
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
 git_mirror equalizerapo svn svn://svn.code.sf.net/p/equalizerapo/code/trunk
-git_mirror ffmpeg-debian git https://alioth.debian.org/anonscm/git/collab-maint/ffmpeg.git
 git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
 git_mirror flashdevelop svn http://flashdevelop.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
