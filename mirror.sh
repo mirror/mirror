@@ -21,7 +21,6 @@ git_mirror dmidecode git http://git.savannah.gnu.org/r/dmidecode.git
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
 git_mirror equalizerapo svn svn://svn.code.sf.net/p/equalizerapo/code/trunk
 git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
-git_mirror flashdevelop svn http://flashdevelop.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
 git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
 git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
