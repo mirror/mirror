@@ -23,7 +23,7 @@ git_mirror equalizerapo svn svn://svn.code.sf.net/p/equalizerapo/code/trunk
 git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
 git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
-git_mirror jd_unofficial svn svn://svn.jdownloader.org/jdownloader/trunk
+git_mirror jdownloader svn svn://svn.jdownloader.org/jdownloader/trunk
 git_mirror launch4j git git://git.code.sf.net/p/launch4j/git
 git_mirror levelzap git https://git01.codeplex.com/levelzap
 git_mirror libdvdread git git://git.videolan.org/libdvdread.git
