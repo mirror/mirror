@@ -6,6 +6,7 @@
 . git_mirror.sh
 
 # repos
+git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
 git_mirror busybox git git://busybox.net/busybox.git
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror chromium git https://chromium.googlesource.com/chromium/src.git
