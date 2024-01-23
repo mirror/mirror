@@ -1,0 +1,200 @@
+name: CI
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+concurrency:
+  group: ${{ github.workflow}}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  cleanup:
+    name: Clean Up
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Delete release
+        run: |
+          # step script
+          set -x
+          release_id="$(gh api "/repos/$GITHUB_REPOSITORY/releases/tags/${{ github.event.pull_request.number }}" --jq .id)"
+          gh api --method DELETE "/repos/$GITHUB_REPOSITORY/releases/$release_id"
+      - name: Delete tag
+        run: gh api --method DELETE "/repos/$GITHUB_REPOSITORY/git/refs/tags/${{ github.event.pull_request.number }}"
+
+  plan:
+    name: TF Plan
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dependencies
+        run: sudo apt-get install -y colorized-logs
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Import PGP key
+        env:
+          TFSTATE_PGP_KEY: ${{ secrets.TF_TFSTATE_PGP_KEY }}
+        run: gpg --import <<< "$TFSTATE_PGP_KEY"
+      - name: Download and decrypt statefile
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./scripts/get-state-file.sh
+      - name: Terraform init
+        run: terraform init
+      - name: Generate app token
+        id: generate-app-token
+        uses: tibdex/github-app-token@v1.9.0
+        with:
+          app_id: ${{ vars.GH_APP_APP_ID }}
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+      - name: Terraform plan
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-app-token.outputs.token }}
+        run: terraform plan | tee >(ansi2txt > terraform.tfplan.log)
+      - name: Create release body
+        run: |
+          cat \
+            <(echo "<details><summary>Terraform Plan Log</summary>") \
+            <(echo "") \
+            <(echo '```') \
+            terraform.tfplan.log \
+            <(echo '```') \
+            <(echo "</details>") \
+          > release.md
+      - name: Create or update tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # step script
+          set -x
+          
+          if gh api /repos/:owner/:repo/git/ref/tags/${{ github.event.pull_request.number }}; then
+            gh api --method PATCH /repos/:owner/:repo/git/refs/tags/${{ github.event.pull_request.number }} \
+              -f sha=${{ github.event.pull_request.head.sha }} \
+              -F force=true \
+              | jq .
+          else
+            gh api --method POST /repos/:owner/:repo/git/refs \
+              -f ref=refs/tags/${{ github.event.pull_request.number }} \
+              -f sha=${{ github.event.pull_request.head.sha }} \
+              | jq .
+          fi
+      - name: Create release
+        id: create-release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: release.md
+          prerelease: true
+          files: terraform.tfplan.log
+          tag_name: ${{ github.event.pull_request.number }}
+          name: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})
+          fail_on_unmatched_files: true
+          target_commitish: ${{ github.event.pull_request.head.sha }}
+
+  apply:
+    name: TF Apply
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dependencies
+        run: sudo apt-get install -y colorized-logs
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Import PGP key
+        env:
+          TFSTATE_PGP_KEY: ${{ secrets.TF_TFSTATE_PGP_KEY }}
+        run: gpg --import <<< "$TFSTATE_PGP_KEY"
+      - name: Download and decrypt statefile
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./scripts/get-state-file.sh
+      - name: Terraform init
+        run: terraform init
+      - name: Generate app token
+        id: generate-app-token
+        uses: tibdex/github-app-token@v1.9.0
+        with:
+          app_id: ${{ vars.GH_APP_APP_ID }}
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+      - name: Terraform apply
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-app-token.outputs.token }}
+        run: terraform apply -auto-approve | tee >(ansi2txt > terraform.apply.log)
+      - name: Encrypt statefile
+        env:
+          GH_APP_BOT_EMAIL: ${{ vars.GH_APP_BOT_EMAIL }}
+        run: |
+          # step script
+          set -x
+          gpg --batch --encrypt --recipient "$GH_APP_BOT_EMAIL" --trust-model always \
+            --output terraform.tfstate.gpg terraform.tfstate
+          
+          if [ -f terraform.tfstate.backup ]; then
+            gpg --batch --encrypt --recipient "$GH_APP_BOT_EMAIL" --trust-model always \
+              --output terraform.tfstate.backup.gpg terraform.tfstate.backup
+          fi
+      - name: Create release body
+        run: |
+          cat \
+            <(echo "<details><summary>Terraform Apply Log</summary>") \
+            <(echo "") \
+            <(echo '```') \
+            terraform.apply.log \
+            <(echo '```') \
+            <(echo "</details>") \
+          > release.md
+      - name: Create or update tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # step script
+          set -x
+          
+          if gh api /repos/:owner/:repo/git/ref/tags/${{ github.event.pull_request.number }}; then
+            gh api --method PATCH /repos/:owner/:repo/git/refs/tags/${{ github.event.pull_request.number }} \
+              -f sha=${{ github.event.pull_request.merge_commit_sha }} \
+              -F force=true \
+              | jq .
+          else
+            gh api --method POST /repos/:owner/:repo/git/refs \
+              -f ref=refs/tags/${{ github.event.pull_request.number }} \
+              -f sha=${{ github.event.pull_request.merge_commit_sha }} \
+              | jq .
+          fi
+      - name: Create release
+        id: create-release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: release.md
+          prerelease: false
+          files: |
+            terraform.apply.log
+            terraform.tfstate*.gpg
+          tag_name: ${{ github.event.pull_request.number }}
+          name: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})
+          fail_on_unmatched_files: true
+          target_commitish: ${{ github.event.pull_request.merge_commit_sha }}
+      - name: Clean up plan log from release
+        env:
+          release_id: ${{ steps.create-release.outputs.id }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # step script
+          set -x
+          release_assets="$(gh api "/repos/:owner/:repo/releases/$release_id" --jq .assets)"
+          tfplanlog_asset_id="$(jq -r '.[] | select(.name == "terraform.tfplan.log") | .id' <<< "$release_assets")"
+          if [[ "$tfplanlog_asset_id" != "" ]]; then
+            gh api --method DELETE "/repos/:owner/:repo/releases/assets/$tfplanlog_asset_id"
+          fi
+            
+          
