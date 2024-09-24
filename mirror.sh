@@ -2,8 +2,15 @@
 # Repo list
 
 # import
-. git_login.sh
-. git_mirror.sh
+source git_login.sh
+# source git_mirror.sh
+
+function git_mirror() {
+	bash git_mirror.sh $@
+}
+
+# test
+# git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk --dry-run; exit
 
 # repos
 git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
