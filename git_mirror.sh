@@ -2,6 +2,34 @@
 # Repository mirrorer
 # © John Peterson. License GNU GPL 3.
 
+function show_usage() {
+	echo mirror repo to git hub
+	echo example usage: "git_mirror.sh abc bzr http://launchpad/abc "" --debug --dry-run"
+	exit 0
+}
+
+if [ $# -lt 3 ]; then
+	echo too few arguments
+	show_usage
+	exit 1
+fi
+
+# defaults
+isdry=false
+isdebug=false
+
+# while [ $# -ge 1 ]; do
+for var in "$@"; do
+case "$var" in
+	-\?|-h|--help|--usage)
+		show_usage;;
+	-n|--dry-run)
+		isdry=true;;
+	-d|--debug)
+		isdebug=true;;
+esac
+done
+
 function create_repo() {
 	name=$1
 	description=$2
@@ -18,7 +46,7 @@ function create_repo() {
 	json=$(curl -s -u "$user:$pwd" -X PATCH -d "{\"name\":\"$name\", \"description\":\"$description\"}" https://api.github.com/repos/$org/$name)
 }
 
-function git_mirror() {
+# function git_mirror() {
 	# vars
 	TO=(${1//\// });
 	to=${TO[0]}
@@ -26,18 +54,46 @@ function git_mirror() {
 	type=$2
 	from=$3
 	arg=$4
+
+	# repo home
+	if [ -z "$REPO_HOME" ]; then echo "REPO_HOME not set using ."; REPO_HOME=.; fi
+	if [ ! -d "$REPO_HOME" ]; then echo "$REPO_HOME doesn't exist"; return 1; fi
 	dir=$REPO_HOME/$to
 
-	# exceptions
-	if [ -z "$REPO_HOME" ]; then echo "REPO_HOME not set"; return 1; fi
-	if [ ! -d "$REPO_HOME" ]; then echo "$REPO_HOME doesn't exist"; return 1; fi
+# target org
+if [ -z "$org" ]; then
+	echo org is unset using mirror
+	org=mirror
+fi
 
 	# create boolean
 	isbzr=`if [[ "$type" =~ "bzr" ]]; then printf true; else printf false; fi`
 	isgit=`if [[ "$type" =~ "git" ]]; then printf true; else printf false; fi`
 	issvn=`if [[ "$type" =~ "svn" ]]; then printf true; else printf false; fi`
 
-	# create repo
+
+# debug
+if $isdebug; then
+	echo to $to
+	echo branch $branch
+	echo type $type
+	echo from $from
+	echo arg $arg
+	set -x
+fi
+
+# disable all commands
+if $isdry; then
+	shopt -s expand_aliases
+	for a in bzr curl git hg jshon mkdir popd pushd svn; do
+		alias $a="echo $a"
+	done
+	type git
+	git -v
+fi
+
+# create repo if git_login is sourced
+if [ -n "$user" ]; then
 	json=$(curl -s https://api.github.com/repos/$org/$to)
 	error=$(echo "$json" | jshon -Q -e message -u)
 	if [ -n "$error" ] && [[ "$error" != "API rate limit exceeded"* ]]; then
@@ -46,6 +102,7 @@ function git_mirror() {
 			return 1
 		fi
 	fi
+fi
 
 	# push command
 	if [ -n "$branch" ]; then
@@ -62,7 +119,7 @@ function git_mirror() {
 	fi
 
 	# log
-	echo ►$to $(date -Is)
+	echo pushing $to $(date -Is)
 
 	# pull command
 	case "$type" in
@@ -85,29 +142,27 @@ function git_mirror() {
 		r='add'
 	fi
 
-	# clone
-	if [[ ! -d $dir || ! ($isgit && -f $dir/HEAD || !$isgit && -f $dir/.git/HEAD) ]]; then
-		mkdir -p $dir; pushd $dir
-		echo $ git $c
-		git $c
-		echo $ git remote $r origin git@github.com:$org/$to.git
-		git remote $r origin git@github.com:$org/$to.git
+# clone
+if [[ ! -d $dir || ! ($isgit && -f $dir/HEAD || !$isgit && -f $dir/.git/HEAD) ]]; then
+	mkdir -p $dir; pushd $dir
+	git $c
+	git remote $r origin git@github.com:$org/$to.git
+fi
 
-		# select branch
-		if $isbzr; then
-			echo $ git checkout bzr/master
-			git checkout bzr/master
-		fi
+	# select branch
+	if $isbzr; then
+		git checkout bzr/master
 	fi
 
 	# change directory
 	pushd $dir
 
 	# sync
-	echo $ git $p
 	git $p
-	echo $ git $m
 	git $m
 
+	# return to home
 	popd
-}
+
+	if $isdebug; then set +x; fi
+# }
