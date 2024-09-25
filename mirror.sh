@@ -1,10 +1,6 @@
 #!/bin/bash
 # Repo list
 
-# import
-source git_login.sh
-# source git_mirror.sh
-
 args=$@
 
 function git_mirror() {
