@@ -68,7 +68,7 @@ git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
 git_mirror tclap git git://git.code.sf.net/p/tclap/code
 git_mirror tinycc git git://repo.or.cz/tinycc.git
 git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
-git_mirror vbox svn http://www.virtualbox.org/svn/vbox/trunk
+git_mirror vbox svn https://www.virtualbox.org/svn/vbox/trunk
 git_mirror virtualjaguar git http://shamusworld.gotdns.org/git/virtualjaguar
 git_mirror VMsvga2 svn svn://svn.code.sf.net/p/vmsvga2/code/VMsvga2/trunk
 git_mirror waver bzr lp:waver
