@@ -4,11 +4,17 @@
 args=$@
 
 function git_mirror() {
+if [ $# -lt 4 ]; then
+	bash git_mirror.sh $@ "" $args
+else
 	bash git_mirror.sh $@ $args
+fi
 }
 
 # test
-# git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk; exit
+# git_mirror xmlrpc-c svn http://svn.code.sf.net/p/xmlrpc-c/code '--ignore-paths=^(release_number|super_stable|userguide)'
+# git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
+# exit
 
 # repos
 git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
