@@ -100,7 +100,7 @@ function have_api() {
 }
 
 function is_big() {
-	if ! $haveapi; then	return 0; fi
+	if ! $haveapi || $isdry; then	return 0; fi
 	echo checking size
 	json=$(curl -s $login https://api.github.com/repos/$org/$to)
 	size=$(echo $json|jshon -e size -u)
@@ -113,9 +113,9 @@ else
 fi
 }
 
-# are we behind ?
+# only git has shallow clones
 function is_behind() {
-	if ! $haveapi; then	return 0; fi
+	if ! $haveapi || $isdry || ! $isgit; then	return 0; fi
 	echo comparing head dates
 
 	case "$type" in
@@ -221,8 +221,12 @@ fi
 		p='remote update'
 		s=set-url
 		r='set-url --push';;
-	hg) c="hg clone $from ."
-		p='hg pull';;
+	hg) c="clone --mirror hg::$from ."
+		p="pull"
+		r='set-url --push';;
+		# git-hg is broken "Cannot chdir to $cdup..."
+		# c="hg clone $from ."
+		# p='hg pull';;
 	svn) issvn=true
 		c="svn clone $arg $from ."
 		p="svn rebase"
