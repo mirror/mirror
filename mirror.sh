@@ -27,7 +27,6 @@ git_mirror cvs-fast-export git git://gitorious.org/cvs-fast-export/cvs-fast-expo
 git_mirror cvsps git git://gitorious.org/cvsps/cvsps.git
 git_mirror daphne-emu svn https://www.daphne-emu.com:9443/daphnesvn/branches/v_1_0
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
-git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
 git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode git http://git.savannah.gnu.org/r/dmidecode.git
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
@@ -78,7 +77,6 @@ git_mirror vbox svn http://www.virtualbox.org/svn/vbox/trunk
 git_mirror virtualjaguar git http://shamusworld.gotdns.org/git/virtualjaguar
 git_mirror VMsvga2 svn svn://svn.code.sf.net/p/vmsvga2/code/VMsvga2/trunk
 git_mirror wget git git://git.sv.gnu.org/wget.git
-git_mirror wiimms-iso-tools svn http://opensvn.wiimm.de/wii/branches/public/wiimms-iso-tools
 git_mirror winscp cvs :pserver:anonymous@winscp.cvs.sourceforge.net:/cvsroot/winscp winscp3
 git_mirror x264 git http://git.videolan.org/git/x264.git
 git_mirror xmlrpc-c svn http://svn.code.sf.net/p/xmlrpc-c/code '--ignore-paths=^(release_number|super_stable|userguide)'
@@ -87,3 +85,8 @@ git_mirror xserver git git://anongit.freedesktop.org/xorg/xserver
 
 # The following projects are dead:
 # git_mirror vba-rerecording svn http://vba-rerecording.googlecode.com/svn/trunk
+
+# already at https://github.com/DD-WRT-CN/ddwrt
+# git_mirror dd-wrt svn svn://svn.dd-wrt.com/DD-WRT
+# https://github.com/Wiimm/wiimms-iso-tools
+# git_mirror wiimms-iso-tools svn http://opensvn.wiimm.de/wii/branches/public/wiimms-iso-tools
