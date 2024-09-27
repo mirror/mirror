@@ -3,7 +3,7 @@
 # © John Peterson. License GNU GPL 3.
 
 # install
-# sudo apt install -y git mercurial git-svn git-remote-bzr jshon jq python3 python-is-python3
+# sudo apt install -y git mercurial subversion git-cvs git-svn git-remote-bzr jshon jq python3 python-is-python3
 # curl https://raw.githubusercontent.com/felipec/git-remote-hg/master/git-remote-hg -o ~/bin/git-remote-hg
 # chmod +x ~/bin/git-remote-hg
 
@@ -34,6 +34,7 @@ fi
 isbzr=false
 iscvs=false
 isgit=false
+ishg=false
 issvn=false
 isdebug=false
 isdry=false
@@ -71,10 +72,12 @@ case "$arg" in
 esac
 done
 
-# disable all commands
+# alias
+shopt -s expand_aliases
+alias svn="svn --trust-server-cert --non-interactive"
+# disable commands
 if $isdry; then
-	shopt -s expand_aliases
-	for a in bzr git hg mkdir popd pushd rm svn; do
+	for a in git hg mkdir popd pushd rm; do
 		alias $a="echo $a"
 	done
 	# type git; git -v
@@ -141,26 +144,31 @@ fi
 
 # only git has shallow clones
 function is_behind() {
-	if ! $haveapi || ! $isgit; then	return 0; fi
+	if ! $haveapi; then	return 0; fi
 	echo comparing head dates
-	if  $isdry || ! $istest; then	return 0; fi
+	if  $isdry && ! $istest; then	return 0; fi
 
 	json=$(curl -s $login https://api.github.com/repos/$org/$to/branches/master)
 	md=$(echo $json|jq -r '.. | .date? | strings'|tail -1)
+
+	case "$type" in
+	git)
+		local c="clone --quiet --depth=1";;&
+	hg)
+		local c=" hg clone";;&
+	svn)
+		svn info $from >/dev/null
+		if [ $? -ne 0 ]; then
+			exit
+		fi
+		sd=$(date -u -Is -d "$(svn info $from| grep 'Date' |cut -d' ' -f4-6)"|sed s,+00:00,Z,)
+		;;
+	git|hg)
 
 	if $istest ; then
 		echo last commit $md
 		return 0
 	fi
-
-	case "$type" in
-	git)
-		local c="clone --quiet --depth=1";;
-	hg)
-		local c=" hg clone";;
-	*) format false 9 add $type date comparison
-		return 0;;
-	esac
 
 	# shopt -u expand_aliases
 	rm -rf tmp
@@ -171,13 +179,31 @@ function is_behind() {
 	sd=$(TZ=UTC0 git show HEAD --quiet --date=iso-strict-local --format="%cd"|sed "s,+00:00,Z,")
 	popd
 	# shopt -s expand_aliases
-	
+	;;
+
+	*) format false 9 add $type date comparison
+		return 0;;
+	esac
+
 	if [ "$sd" == "$md" ]; then
 		format false 2 up to date $sd
 		exit 0
 	else
 		format false 9 updating from $md to $sd
 	fi
+}
+
+function remote_exist() {
+	case "$type" in
+	svn)
+		svn info $from >/dev/null
+		if [ $? -ne 0 ]; then
+			exit 1
+		fi
+		;;
+	*)
+		return 0
+esac
 }
 
 function mirror_exist() {
@@ -244,9 +270,12 @@ fi
 
 	# type
 	case "$type" in
-	bzr|git|hg|svn) 
-		r='set-url --push'
+	bzr|cvs|git|hg|svn) 
 		m="push $q --mirror";;&
+	bzr|git|hg) 
+		r='set-url --push';;&
+	cvs|svn) 
+		r='add';;&
 	bzr|hg) 
 		c="clone $q --mirror $type::$from ."
 		p="pull";;&
@@ -259,7 +288,6 @@ fi
 	cvs)
 		iscvs=true
 		c="cvsimport -i -d $from $arg"
-	r='add'
 		p="$c";;
 	git)
 		isgit=true
@@ -267,13 +295,12 @@ fi
 		p='remote update'
 		s=set-url;;
 	hg)
-		;;
+		ishg=true;;
 		# git-hg is broken "Cannot chdir to $cdup..."
 		# c="hg clone $from ."
 		# p='hg pull';;
 	svn) issvn=true
 		c="svn $qq clone $arg $from ."
-		r='add'
 		p="svn $qq rebase";;
 		# preserve history instead of update
 		# m="push $q origin master";;
@@ -299,6 +326,8 @@ fi
 		dir=${dir}_$branch
 		m="push origin HEAD:$branch"
 	fi
+
+remote_exist
 
 if $isint; then
 read -s -n 1 -p "mirror [␣↵/*]" yn
@@ -362,10 +391,18 @@ fi
 	if false; then
 		echo clone existing mirror 
 		git clone --mirror git@github.com:$org/$to .
-		if $isbzr; then
-			echo create branch
-			git branch master
-		fi
+
+		echo post processing
+		case "$type" in
+			bzr)
+			git branch master;;
+	esac
+		case "$to" in
+			jdownloader)
+			java -jar bfg.jar --strip-blobs-bigger-than 50M
+			if [ $? -ne 0 ]; then exit $?; fi;;
+	esac
+
 		echo update remote
 		git remote $s origin $from
 		git remote $r origin git@github.com:$org/$to
