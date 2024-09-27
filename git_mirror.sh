@@ -10,7 +10,10 @@ function show_usage() {
 	echo 'example usage: git_mirror.sh abc bzr http://launchpad/abc "" --debug --dry-run
 --fast skip svn cvs
 --interactive require user input
---resume experiment to resume existing svn cvs mirror'
+--resume experiment to resume existing svn cvs mirror
+--small less 100 meg
+--type=hg only this type
+'
 	exit 0
 }
 
@@ -30,6 +33,7 @@ isdry=false
 isfast=false
 isint=false
 isresume=false
+issmall=false
 istest=false
 
 for arg in "$@"; do
@@ -46,8 +50,12 @@ case "$arg" in
 		isint=true;;
 	-r|--resume)
 		isresume=true;;
+	-s|--small)
+		issmall=true;;
 	-t|--test)
 		istest=true;;
+	-y=*|--type*)
+		istype=$(echo $arg|cut -f2 -d=);;
 esac
 done
 
@@ -74,6 +82,10 @@ function format() {
 
 # cloud machine are rate limited 
 function have_api() {
+	if $isdry; then
+		eval $1=false
+		return
+	fi
 	json=$(curl -s https://api.github.com/repos/$org/$to)
 	error=$(echo $json | jshon -Q -e message -u)
 	if [[ "$error" = "API rate limit exceeded"* ]]; then	
@@ -100,13 +112,15 @@ function have_api() {
 }
 
 function is_big() {
-	if ! $haveapi || $isdry; then	return 0; fi
+	if ! ($isfast || $issmall); then return 0; fi
 	echo checking size
+	if $isdry; then	return 0; fi
+	if ! $haveapi; then	return 0; fi
 	json=$(curl -s $login https://api.github.com/repos/$org/$to)
 	size=$(echo $json|jshon -e size -u)
 	megs=$(numfmt --to=iec $(($size*1024)))
 if [ $size -gt 100000 ]; then
-	format false 9 $megs too big for --fast
+	format false 9 $megs too big for --fast and --small
 	exit 1
 else
 	format false 2 $megs
@@ -228,9 +242,10 @@ fi
 		# c="hg clone $from ."
 		# p='hg pull';;
 	svn) issvn=true
-		c="svn clone $arg $from ."
-		p="svn rebase"
-			m="push";;
+		git config --global http.sslVerify false
+		c="svn -qq clone $arg $from ."
+		p="svn -qq rebase"
+			m="push origin master";;
 	*) echo "$type is unsupported"; return 1;;
 	esac
 	
@@ -238,12 +253,31 @@ fi
 	echo
 	format true -1 $to $type
 
-	
+# debug
+if $isdebug; then
+	set -x
+fi
+
+	# skip type
+
+if [ -n "$istype" -a "$istype" != "$type" ]; then
+	exit
+fi
+
 	# branch push command
 	if [ -n "$branch" ]; then
 		dir=${dir}_$branch
 		m="push origin HEAD:$branch"
 	fi
+
+if $isint; then
+read -s -n 1 -p "mirror [␣↵/*]" yn
+echo
+case $yn in
+"" ) ;;
+* ) exit;;
+esac
+fi
 
 # clone
 # why do we need this?
@@ -256,7 +290,7 @@ if [[ -d $dir ]]; then
 else
 echo no existing clone on disk
 
-	if $isfast && ($issvn || $iscvs); then
+	if $isfast && [ -z "$istype" ] && ($issvn || $iscvs); then
 		echo --fast disable new $type clones
 		exit 1
 	fi
@@ -265,20 +299,6 @@ echo no existing clone on disk
 		echo $type not support resume
 		exit 1
 	fi
-
-if $isint; then
-read -s -n 1 -p "create new mirror [␣↵/*]" yn
-echo
-case $yn in
-"" ) ;;
-* ) exit;;
-esac
-fi
-
-# debug
-if $isdebug; then
-	set -x
-fi
 
 # api
 haveapi=false
@@ -316,7 +336,7 @@ fi
 		git remote $r origin git@github.com:$org/$to
 
 	else
-		echo cloning $from ...
+		echo $(date -Im -u)Z cloning $from ...
 		git $c
 		echo update remote address
 		git remote $r origin git@github.com:$org/$to
