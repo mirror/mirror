@@ -11,11 +11,6 @@ else
 fi
 }
 
-# test
-# git_mirror xmlrpc-c svn http://svn.code.sf.net/p/xmlrpc-c/code '--ignore-paths=^(release_number|super_stable|userguide)'
-# git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
-# exit
-
 # repos
 git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
 git_mirror busybox git git://busybox.net/busybox.git
@@ -76,6 +71,7 @@ git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
 git_mirror vbox svn http://www.virtualbox.org/svn/vbox/trunk
 git_mirror virtualjaguar git http://shamusworld.gotdns.org/git/virtualjaguar
 git_mirror VMsvga2 svn svn://svn.code.sf.net/p/vmsvga2/code/VMsvga2/trunk
+git_mirror waver bzr lp:waver
 git_mirror wget git git://git.sv.gnu.org/wget.git
 git_mirror winscp cvs :pserver:anonymous@winscp.cvs.sourceforge.net:/cvsroot/winscp winscp3
 git_mirror x264 git http://git.videolan.org/git/x264.git

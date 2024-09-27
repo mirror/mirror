@@ -2,6 +2,11 @@
 # Repository mirrorer
 # © John Peterson. License GNU GPL 3.
 
+# install
+# sudo apt install -y git mercurial git-svn git-remote-bzr jshon jq python3 python-is-python3
+# curl https://raw.githubusercontent.com/felipec/git-remote-hg/master/git-remote-hg -o ~/bin/git-remote-hg
+# chmod +x ~/bin/git-remote-hg
+
 # import
 source git_login.sh 2>/dev/null
 
@@ -10,9 +15,11 @@ function show_usage() {
 	echo 'example usage: git_mirror.sh abc bzr http://launchpad/abc "" --debug --dry-run
 --fast skip svn cvs
 --interactive require user input
+--quiet no progress info
 --resume experiment to resume existing svn cvs mirror
 --small less 100 meg
---type=hg only this type
+--test test api during dry run
+--type=hg -thg only this type
 '
 	exit 0
 }
@@ -48,13 +55,18 @@ case "$arg" in
 		isfast=true;;
 	-i|--interactive)
 		isint=true;;
+	-q|--quiet)
+		q=-q
+		qq=-qq;;
 	-r|--resume)
 		isresume=true;;
 	-s|--small)
 		issmall=true;;
-	-t|--test)
+	--test)
 		istest=true;;
-	-y=*|--type*)
+	-t*)
+		istype=$(echo $arg|cut -c 3-);;
+	--type*)
 		istype=$(echo $arg|cut -f2 -d=);;
 esac
 done
@@ -82,7 +94,7 @@ function format() {
 
 # cloud machine are rate limited 
 function have_api() {
-	if $isdry; then
+	if $isdry && ! $istest; then
 		eval $1=false
 		return
 	fi
@@ -114,7 +126,7 @@ function have_api() {
 function is_big() {
 	if ! ($isfast || $issmall); then return 0; fi
 	echo checking size
-	if $isdry; then	return 0; fi
+	if $isdry && ! $istest; then	return 0; fi
 	if ! $haveapi; then	return 0; fi
 	json=$(curl -s $login https://api.github.com/repos/$org/$to)
 	size=$(echo $json|jshon -e size -u)
@@ -129,8 +141,17 @@ fi
 
 # only git has shallow clones
 function is_behind() {
-	if ! $haveapi || $isdry || ! $isgit; then	return 0; fi
+	if ! $haveapi || ! $isgit; then	return 0; fi
 	echo comparing head dates
+	if  $isdry || ! $istest; then	return 0; fi
+
+	json=$(curl -s $login https://api.github.com/repos/$org/$to/branches/master)
+	md=$(echo $json|jq -r '.. | .date? | strings'|tail -1)
+
+	if $istest ; then
+		echo last commit $md
+		return 0
+	fi
 
 	case "$type" in
 	git)
@@ -151,9 +172,6 @@ function is_behind() {
 	popd
 	# shopt -s expand_aliases
 	
-	json=$(curl -s $login https://api.github.com/repos/$org/$to/branches/master)
-	md=$(echo $json|jq -r '.. | .date? | strings'|tail -1)
-
 	if [ "$sd" == "$md" ]; then
 		format false 2 up to date $sd
 		exit 0
@@ -163,12 +181,13 @@ function is_behind() {
 }
 
 function mirror_exist() {
-	if ! $haveapi || $isdry; then	return 0; fi
+	if ! $haveapi; then	return 0; fi
 	echo check for existing repo
+	if $isdry && ! $istest; then	return 0; fi
 	json=$(curl -s $login https://api.github.com/repos/$org/$to)
 	error=$(echo $json | jshon -Q -e message -u)
 	if [[ "$error" = "Not Found" ]]; then
-		format false 10 new mirror $org/$to;
+		format false 9 $org/$to missing;
 		return 1
 	else
 		echo $org/$to exist
@@ -180,13 +199,17 @@ function mirror_exist() {
 function create_repo() {
 	description="$from $arg"
 
+	# todo read pwd from stdin for one time use
+	echo creating $org/$to
 	if [ -z "$user" ]; then
-		echo user unset
+		echo fail user unset
+		echo run gh repo create
 		return 1
 	fi
+	if $isdry; then	return 0; fi
 	
 	# create repo
-	json=$(curl -s $login -d "{\"name\":\"$to\"}" https://api.github.com/orgs/$org/repos)
+	json=$(curl -s -u $user:$pwd -d "{\"name\":\"$to\"}" https://api.github.com/orgs/$org/repos)
 	error=$(echo "$json" | jshon -Q -e message -u)
 	if [ -n "$error" ]; then
 		echo $error;
@@ -194,7 +217,7 @@ function create_repo() {
 	fi
 
 	# set description
-	json=$(curl -s $login -X PATCH -d "{\"name\":\"$name\", \"description\":\"$description\"}" https://api.github.com/repos/$org/$name)
+	json=$(curl -s -u $user:$pwd -X PATCH -d "{\"name\":\"$name\", \"description\":\"$description\"}" https://api.github.com/repos/$org/$name)
 }
 
 	# args
@@ -220,49 +243,56 @@ if [ -z "$org" ]; then
 fi
 
 	# type
-	m="push -q --mirror"
-	r='add'
 	case "$type" in
-	bzr) isbzr=true
-		c="bzr clone $from ."
-		p='bzr sync bzr/master'
-		m="push --tags origin HEAD:master";;
-	cvs) iscvs=true
+	bzr|git|hg|svn) 
+		r='set-url --push'
+		m="push $q --mirror";;&
+	bzr|hg) 
+		c="clone $q --mirror $type::$from ."
+		p="pull";;&
+	bzr)
+		isbzr=true;;
+		# git-bzr
+		# c="bzr clone $from ."
+		# p='bzr sync bzr/master'
+		# m="push --tags origin HEAD:master";;
+	cvs)
+		iscvs=true
 		c="cvsimport -i -d $from $arg"
+	r='add'
 		p="$c";;
-	git) isgit=true
-		c="clone -q --mirror $from ."
+	git)
+		isgit=true
+		c="clone $q --mirror $from ."
 		p='remote update'
-		s=set-url
-		r='set-url --push';;
-	hg) c="clone --mirror hg::$from ."
-		p="pull"
-		r='set-url --push';;
+		s=set-url;;
+	hg)
+		;;
 		# git-hg is broken "Cannot chdir to $cdup..."
 		# c="hg clone $from ."
 		# p='hg pull';;
 	svn) issvn=true
-		git config --global http.sslVerify false
-		c="svn -qq clone $arg $from ."
-		p="svn -qq rebase"
-			m="push origin master";;
-	*) echo "$type is unsupported"; return 1;;
+		c="svn $qq clone $arg $from ."
+		r='add'
+		p="svn $qq rebase";;
+		# preserve history instead of update
+		# m="push $q origin master";;
+	*) echo "$type is unsupported"; exit 1;;
 	esac
 	
-	# title
-	echo
-	format true -1 $to $type
+	# skip type
+if [ -n "$istype" -a "$istype" != "$type" ]; then
+	exit
+fi
 
 # debug
 if $isdebug; then
 	set -x
 fi
 
-	# skip type
-
-if [ -n "$istype" -a "$istype" != "$type" ]; then
-	exit
-fi
+	# title
+	echo
+	format true -1 $to $type
 
 	# branch push command
 	if [ -n "$branch" ]; then
@@ -306,11 +336,13 @@ have_api haveapi
 
 # test
 if $istest; then
-	is_big
+	echo
+	# is_big
 	# is_behind
 	# mirror_exist
-	exit
+	# exit
 fi
+
 	is_big
 
 	is_behind
@@ -320,7 +352,6 @@ fi
 	pushd $dir
 
 	if ! mirror_exist; then
-		echo create new repo
 		if ! create_repo; then
 			exit 1
 		fi
@@ -331,22 +362,28 @@ fi
 	if false; then
 		echo clone existing mirror 
 		git clone --mirror git@github.com:$org/$to .
+		if $isbzr; then
+			echo create branch
+			git branch master
+		fi
 		echo update remote
 		git remote $s origin $from
 		git remote $r origin git@github.com:$org/$to
 
 	else
 		echo $(date -Im -u)Z cloning $from ...
+		export GIT_SSL_NO_VERIFY=1
+		# git config --global http.sslVerify false
 		git $c
 		echo update remote address
 		git remote $r origin git@github.com:$org/$to
 	fi
 fi
 
-	# select branch - fix this
-	if $isbzr; then
-		git checkout bzr/master
-	fi
+	# git-bzr
+	# if $isbzr; then
+		# git checkout bzr/master
+	# fi
 
 	# sync
 	echo updating $org/$to ...
