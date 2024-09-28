@@ -3,9 +3,12 @@
 # © John Peterson. License GNU GPL 3.
 
 # install
-# sudo apt install -y git mercurial subversion git-cvs git-svn git-remote-bzr jshon jq python3 python-is-python3
+# sudo apt install -y git mercurial cvs subversion git-cvs git-svn git-remote-bzr jshon jq python3 python-is-python3
+#
 # curl https://raw.githubusercontent.com/felipec/git-remote-hg/master/git-remote-hg -o ~/bin/git-remote-hg
 # chmod +x ~/bin/git-remote-hg
+# 
+# https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
 
 # import
 source git_login.sh 2>/dev/null
@@ -154,13 +157,15 @@ function is_behind() {
 	case "$type" in
 	git)
 		local c="clone --quiet --depth=1";;&
+
 	hg)
 		local c=" hg clone";;&
+
+		cvs)
+		sd=$(date -u -Is -d "$(cvs -d $from history -a -T|tail -1|cut -f2-4 -d" ")" |sed s,+00:00,Z,)
+		# cvs -d $from log -N| grep ^date: | sort | tail -n 1 | cut -d\; -f1
+		;;
 	svn)
-		svn info $from >/dev/null
-		if [ $? -ne 0 ]; then
-			exit
-		fi
 		sd=$(date -u -Is -d "$(svn info $from| grep 'Date' |cut -d' ' -f4-6)"|sed s,+00:00,Z,)
 		;;
 	git|hg)
@@ -181,7 +186,9 @@ function is_behind() {
 	# shopt -s expand_aliases
 	;;
 
-	*) format false 9 add $type date comparison
+	*)
+		format false 10 mirror date $md 
+		format false 9 add $type date comparison
 		return 0;;
 	esac
 
@@ -195,12 +202,16 @@ function is_behind() {
 
 function remote_exist() {
 	case "$type" in
+	cvs)
+		cvs -d $from history>/dev/null
+;;&
 	svn)
 		svn info $from >/dev/null
+		;;&
+	cvs|svn)
 		if [ $? -ne 0 ]; then
 			exit 1
-		fi
-		;;
+		fi;;
 	*)
 		return 0
 esac
