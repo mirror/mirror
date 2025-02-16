@@ -39,6 +39,7 @@ git_mirror libX11 git git://anongit.freedesktop.org/xorg/lib/libX11
 git_mirror libXi git git://anongit.freedesktop.org/xorg/lib/libXi
 git_mirror listfix svn https://svn.code.sf.net/p/listfix/code/dev
 git_mirror make git git://git.savannah.gnu.org/make
+git_mirror mesa-demos git https://gitlab.freedesktop.org/mesa/demos
 git_mirror mingw-org-wsl git git://git.code.sf.net/p/mingw/mingw-org-wsl
 git_mirror mingw-w64 git git://git.code.sf.net/p/mingw-w64/mingw-w64
 git_mirror model3emu svn https://svn.code.sf.net/p/model3emu/code/trunk
