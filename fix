@@ -1,0 +1,26 @@
+#!/bin/env bash
+
+# fix empty tag dates 
+
+sed -re 's/error in tag ([0-9a-f]+):.*/\1/' fsck.log | while read broken; do
+     echo hash=$broken
+test -z "$(git name-rev $broken)" && continue
+# git show  $broken --name-only
+# git log -1 $broken
+     # commit=$(git rev-parse ${broken}^{commit})
+     # tag=$(git show $broken|head -1|cut -f2 -d" ")
+     # tag=$(git cat-file tag $broken|sed "3q;d"|cut -f2 -d" ")
+		 tag=$(git cat-file tag $broken | sed -n 's/^tag //p')
+     body=$(git cat-file tag $broken | sed -n '/^$/,$p' | tail -n +2)
+echo tag=$tag
+echo body=$body
+export GIT_COMMITTER_EMAIL=$(git log -1 $broken --format=%ce)
+export GIT_COMMITTER_NAME=$(git log  -1 $broken --format=%cn)
+export GIT_COMMITTER_DATE=$(git log -1 $broken --format=%cd)
+
+git tag -m"$body" -a -f $tag $broken^{}
+# git update-ref -d refs/tags/$t
+git update-ref -d refs/hashes/$broken
+# sleep 50
+#
+done
