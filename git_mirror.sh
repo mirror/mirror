@@ -264,6 +264,7 @@ function create_repo() {
 	type=$2
 	from=$3
 arg=$4
+host=$(echo $from | awk -F[/:] '{print $4}')
 
 	# repo home
 	if [ -z "$REPO_HOME" ]; then
@@ -280,9 +281,13 @@ if [ -z "$org" ]; then
 fi
 
 	# type
-	case "$type" in
+	case $type in
 	bzr|cvs|git|hg|svn) 
-		m="push $q --mirror";;&
+		case $host in
+			*gitlab*|github.com) 
+				m="push $q --all  --prune" ;;
+			*) m="push $q --mirror";;
+		esac ;;&
 	bzr|git|hg) 
 		r='set-url --push';;&
 	cvs|svn) 
@@ -301,9 +306,16 @@ fi
 		c="cvsimport -i -d $from $arg"
 		p="$c";;
 	git)
+		case $host in
+			*gitlab*|github.com) 
+				c="clone $q  --no-single-branch --bare $from ."
+			# p='fetch --all --prune';;
+			# will this still get everything?
+			p='remote update';;
+			*) c="clone $q --mirror $from ."
+			p='remote update';;
+		esac
 		isgit=true
-		c="clone $q --mirror $from ."
-		p='remote update'
 		s=set-url;;
 	hg)
 		ishg=true;;
