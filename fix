@@ -1,22 +1,33 @@
 #!/bin/env bash
 
-# fix empty tag dates 
+find_bad_objects(){
+test -f fsck.log || git fsck --full |& tee fsck.log
+sed -re 's/error in tag ([0-9a-f]+):.*/\1/' fsck.log > bad_objects
+}
 
-sed -re 's/error in tag ([0-9a-f]+):.*/\1/' fsck.log | while read broken; do
+# fix empty tag dates 
+fix_empty_date(){
+cat bad_objects | while read broken; do
      echo hash=$broken
 test -z "$(git name-rev $broken)" && continue
 # git show  $broken --name-only
 # git log -1 $broken
      # commit=$(git rev-parse ${broken}^{commit})
      # tag=$(git show $broken|head -1|cut -f2 -d" ")
+     olddate=$(git show $broken|grep Date -m 1)
      # tag=$(git cat-file tag $broken|sed "3q;d"|cut -f2 -d" ")
 		 tag=$(git cat-file tag $broken | sed -n 's/^tag //p')
      body=$(git cat-file tag $broken | sed -n '/^$/,$p' | tail -n +2)
+newdate=$(git log -1 $broken --format=%cd)
+
 echo tag=$tag
 echo body=$body
+echo olddate=$olddate
+echo newdate=$newdate
+
 export GIT_COMMITTER_EMAIL=$(git log -1 $broken --format=%ce)
 export GIT_COMMITTER_NAME=$(git log  -1 $broken --format=%cn)
-export GIT_COMMITTER_DATE=$(git log -1 $broken --format=%cd)
+export GIT_COMMITTER_DATE=$newdate
 
 git tag -m"$body" -a -f $tag $broken^{}
 # git update-ref -d refs/tags/$t
@@ -24,3 +35,28 @@ git update-ref -d refs/hashes/$broken
 # sleep 50
 #
 done
+}
+
+remove_objects(){
+# I don't know if this is necessary the servers did not immediately give a fsck reject message but a refuse message at the end
+git reflog expire --expire=all --all
+  git repack -A -d
+  git prune
+  git gc --prune=all
+git fsck --full --unreachable
+}
+
+staged_push(){
+# try a staged push first if error
+git push origin main~160000:main
+git checkout HEAD~150000
+git checkout -b old
+git push
+}
+
+remove_pipelines(){
+for ref in $(git for-each-ref refs/pipelines|tr "\t" " "|cut -f3 -d" "); do
+  echo deleting $ref
+  git update-ref -d $ref
+done
+}
