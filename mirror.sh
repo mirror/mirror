@@ -13,6 +13,7 @@ fi
 
 # repos
 git_mirror astyle svn https://svn.code.sf.net/p/astyle/code/trunk
+git_mirror bash git git://git.savannah.gnu.org/bash
 git_mirror busybox git git://busybox.net/busybox.git
 git_mirror chere git git://repo.or.cz/chere.git
 git_mirror chromium git https://chromium.googlesource.com/chromium/src.git
@@ -24,10 +25,12 @@ git_mirror daphne-emu svn https://www.daphne-emu.com:9443/daphnesvn/branches/v_1
 git_mirror darwinbuild svn http://svn.macosforge.org/repository/darwinbuild/trunk
 git_mirror desmume svn https://svn.code.sf.net/p/desmume/code/trunk
 git_mirror dmidecode git http://git.savannah.gnu.org/r/dmidecode.git
+git_mirror dpkg git https://git.dpkg.org/git/dpkg/dpkg
 git_mirror env-man git git://env-man.git.sourceforge.net/gitroot/env-man/env-man
 git_mirror equalizerapo svn svn://svn.code.sf.net/p/equalizerapo/code/trunk
 git_mirror firmware-mod-kit svn http://firmware-mod-kit.googlecode.com/svn/trunk
 git_mirror freedownload svn svn://svn.code.sf.net/p/freedownload/code/trunc
+git_mirror gnulib git git://git.savannah.gnu.org/gnulib
 git_mirror hydrairc svn http://svn.hydrairc.com/hydrairc/trunk
 git_mirror jdownloader svn svn://svn.jdownloader.org/jdownloader/trunk
 git_mirror launch4j git git://git.code.sf.net/p/launch4j/git
@@ -39,6 +42,7 @@ git_mirror libX11 git git://anongit.freedesktop.org/xorg/lib/libX11
 git_mirror libXi git git://anongit.freedesktop.org/xorg/lib/libXi
 git_mirror listfix svn https://svn.code.sf.net/p/listfix/code/dev
 git_mirror make git git://git.savannah.gnu.org/make
+git_mirror man-db git https://gitlab.com/man-db/man-db
 git_mirror mesa git https://gitlab.freedesktop.org/mesa/mesa
 git_mirror mesa-demos git https://gitlab.freedesktop.org/mesa/demos
 git_mirror mingw-org-wsl git git://git.code.sf.net/p/mingw/mingw-org-wsl
@@ -67,6 +71,7 @@ git_mirror scite hg http://hg.code.sf.net/p/scintilla/scite
 git_mirror sed git git://git.savannah.gnu.org/sed.git
 git_mirror smartmontools svn https://svn.code.sf.net/p/smartmontools/code/trunk/smartmontools
 git_mirror soundtouch svn https://svn.code.sf.net/p/soundtouch/code/trunk
+git_mirror tar git git://git.savannah.gnu.org/tar
 git_mirror tclap git git://git.code.sf.net/p/tclap/code
 git_mirror tinycc git git://repo.or.cz/tinycc.git
 git_mirror vbam svn https://svn.code.sf.net/p/vbam/code
