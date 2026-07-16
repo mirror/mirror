@@ -8,6 +8,7 @@ test run
 
 ~~~
 git-mirror -n abc git git@123
+git-mirror -n abc git https://gitlab/abc
 mirror -n -tgit -i
 ~~~
 
